@@ -1,12 +1,13 @@
 # ros2_transitive_interfaces
 
-Sample repo for re-packaging individual inter-dependent ROS2 packages using Conan.
+Sample repo for re-packaging individual inter-dependent ROS2 packages using Conan2.
 
 ## workspaces
 
 * `interfaces`: message IDL that defines `Sample` message
   * depends on `std_msgs`
 * `publisher`: `Publisher` node packaged as a shared library
+  * publishes `/publisher/hb` and `/publisher/sample` topics
   * depends on `interfaces`
 * `publisher_node`: executable runs an instance of a `Publisher` node
   * depends on `publisher`
@@ -34,28 +35,34 @@ cd publisher_node && . ../publisher/install/setup.bash && colcon build
 
 1. Create `interfaces` package
 ```
-conan create -s compiler.libcxx=libstdc++11 ./interfaces
+conan create interfaces/
 ```
 
 2. Create `publisher` package
 ```
-conan create -s compiler.libcxx=libstdc++11 ./publisher
+conan create publisher/
 ```
 
 3. Create `publisher_node` package
 ```
-conan create -s compiler.libcxx=libstdc++11 ./publisher_node
+conan create publisher_node/
 ```
 
 ## deploy
-This uses conan's deploy generator as a convenience to expose the package `setup.bash` script.
 ```
-conan install -if install -g deploy publisher_node/0.0.1@
+conan install -d full_deploy -of install .
 ```
 
 ## run
 ```
-. install/publisher_node/setup.bash && ros2 run publisher_node publisher_node
+. install/conanrun.sh && ros2 run publisher_node publisher_node
+```
+
+## verify messages and interfaces
+```
+. install/conanrun.sh
+ros2 topic echo /publisher/sample
+ros2 topic echo /publisher/hb
 ```
 
 ## license
