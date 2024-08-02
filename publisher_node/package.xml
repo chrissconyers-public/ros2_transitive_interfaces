@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>publisher_node</name>
+  <version>0.0.1</version>
+  <description>ros2_transitive_interfaces sample publisher node</description>
+  <maintainer email="48865772+chrissconyers@users.noreply.github.com">Chris Sconyers</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+  <build_depend>publisher</build_depend>
+  <exec_depend>publisher</exec_depend>
+
+</package>
