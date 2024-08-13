@@ -6,9 +6,11 @@ Sample repo for re-packaging individual inter-dependent ROS2 packages using Cona
 
 * `interfaces`: message IDL that defines `Sample` message
   * depends on `std_msgs`
-* `publisher`: `Publisher` node packaged as a shared library
-  * publishes `/publisher/hb` and `/publisher/sample` topics
+* `interfaces_ext`: message IDL that defines `SampleExt` message that embeds a `Sample` message
   * depends on `interfaces`
+* `publisher`: `Publisher` node packaged as a shared library
+  * publishes `/publisher/hb`, `/publisher/sample`, and `/publisher/sample_ext` topics
+  * depends on `interfaces_ext`
 * `publisher_node`: executable runs an instance of a `Publisher` node
   * depends on `publisher`
 
@@ -21,12 +23,17 @@ Each step is independent and can be performed in a new session.
 cd interfaces && colcon build
 ```
 
-2. Build `publisher`
+2. Build `interfaces_ext`
 ```
-cd publisher && . ../interfaces/install/setup.bash && colcon build
+cd interfaces_ext && . ../interfaces/install/setup.bash && colcon build
 ```
 
-3. Build `publisher_node`
+3. Build `publisher`
+```
+cd publisher && . ../interfaces_ext/install/setup.bash && colcon build
+```
+
+4. Build `publisher_node`
 ```
 cd publisher_node && . ../publisher/install/setup.bash && colcon build
 ```
@@ -38,12 +45,17 @@ cd publisher_node && . ../publisher/install/setup.bash && colcon build
 conan create interfaces/
 ```
 
-2. Create `publisher` package
+2. Create `interfaces_ext` package
+```
+conan create interfaces_ext/
+```
+
+3. Create `publisher` package
 ```
 conan create publisher/
 ```
 
-3. Create `publisher_node` package
+4. Create `publisher_node` package
 ```
 conan create publisher_node/
 ```
@@ -62,6 +74,7 @@ conan install -d full_deploy -of install .
 ```
 . install/conanrun.sh
 ros2 topic echo /publisher/sample
+ros2 topic echo /publisher/sample_ext
 ros2 topic echo /publisher/hb
 ```
 

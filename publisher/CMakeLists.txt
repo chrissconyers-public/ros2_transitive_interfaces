@@ -10,7 +10,7 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(interfaces REQUIRED)
+find_package(interfaces_ext REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
   src/publisher.cpp
@@ -22,7 +22,7 @@ target_include_directories(${PROJECT_NAME}
 )
 ament_target_dependencies(${PROJECT_NAME}
   rclcpp
-  interfaces
+  interfaces_ext
 )
 
 ament_export_targets(
@@ -31,7 +31,7 @@ ament_export_targets(
 )
 ament_export_dependencies(
   rclcpp
-  interfaces
+  interfaces_ext
 )
 
 install(
